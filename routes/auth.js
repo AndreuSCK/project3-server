@@ -4,6 +4,8 @@ const createError = require("http-errors");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const User = require("../models/user");
+const Canvas = require("../models/canvas");
+
 
 // HELPER FUNCTIONS
 const {
@@ -11,6 +13,53 @@ const {
   isNotLoggedIn,
   validationLoggin,
 } = require("../helpers/middlewares");
+
+
+
+router.post(
+  "/new",
+  // // revisamos si el user no está ya logueado usando la función helper (chequeamos si existe req.session.currentUser)
+  // isNotLoggedIn(),
+  // // revisa que se hayan completado los valores de username y password usando la función helper
+  // validationLoggin(),
+  async (req, res, next) => {
+    console.log(req.body)
+    const { author, gridSize, canvasData, name } = req.body;
+
+
+
+    try {
+      const canvasExists = await Canvas.findOne({ name }, "name");
+      // si el usuario ya existe, pasa el error a middleware error usando next()
+      if (canvasExists) return next(createError(400));
+      else {
+        // en caso contratio, si el usuario no existe, hace hash del password y crea un nuevo usuario en la BD
+        const newCanvas = await Canvas.create({ author, gridSize, canvasData, name });
+        // luego asignamos el nuevo documento user a req.session.currentUser y luego enviamos la respuesta en json
+        // req.session.currentUser = newUser;
+        res
+          .status(200) //  OK
+          .json(newCanvas);
+      }
+
+
+
+
+
+
+    } catch (error) {
+      next(error)
+    }
+  }
+)
+
+
+
+
+
+
+
+
 
 //  POST '/signup'
 
