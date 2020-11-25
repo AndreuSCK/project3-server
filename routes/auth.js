@@ -109,7 +109,9 @@ router.post(
       const user = await User.findOne({ username });
       // si el usuario no existe, pasa el error al middleware error usando next()
       if (!user) {
-        next(createError(404));
+        // next(createError(404));
+        res.status(404).send('User not found!! Who are you?')
+      
       }
       // si el usuario existe, hace hash del password y lo compara con el de la BD
       // loguea al usuario asignando el document a req.session.currentUser, y devuelve un json con el user

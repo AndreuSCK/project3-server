@@ -9,7 +9,8 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const cors = require("cors");
-
+const imageRoutes = require('./routes/image-routes');
+const fileUpload = require('./routes/file-upload');
 const auth = require("./routes/auth");
 
 // MONGOOSE CONNECTION
@@ -51,7 +52,7 @@ app.use(
     resave: true,
     saveUninitialized: true,
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000
     },
   })
 );
@@ -65,7 +66,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // ROUTER MIDDLEWARE
 app.use("/auth", auth);
-
+app.use('/api', require('./routes/file-upload'));
+app.use('/api', require('./routes/image-routes'))
 // ERROR HANDLING
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
