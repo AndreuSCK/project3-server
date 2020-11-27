@@ -2,12 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const canvasScheme = new Schema({
-    author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    // author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     // author: String,
 
-    name: String,
-    gridSize: [Number],
-    canvasData: [[String]]
+    // gridSize: [Number],
+    localID: String,
+    canvasData: [{ type: Schema.Types.ObjectId, ref: 'Componente' }],
+
 }, {
     timestamps: {
         createdAt: 'created_at',
@@ -18,3 +19,5 @@ const canvasScheme = new Schema({
 const Canvas = mongoose.model('Canvas', canvasScheme);
 
 module.exports = Canvas;
+
+// localID, personalID, x, y, textValue, fuenteDelTexto, textoAlineado, widthState, heightState, backgroundDiv

@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const User = require("../models/user");
 const Canvas = require("../models/canvas");
+const Componente = require("../models/componente");
+
 
 
 // HELPER FUNCTIONS
@@ -54,7 +56,31 @@ router.post(
 )
 
 
+router.post(
+  "/savedata",
+  // revisamos si el user no está ya logueado usando la función helper (chequeamos si existe req.session.currentUser)
+  async (req, res, next) => {
+    // const { username, password } = req.body;
+    const { localID, personalID, x, y, textValue, fuenteDelTexto, textoAlineado, widthState, heightState, backgroundDiv } = req.body;
 
+    try {
+      const saveNewComp = await Componente.create({ personalID, x, y, textValue, fuenteDelTexto, textoAlineado, widthState, heightState, backgroundDiv });
+
+    } catch (error) {
+      console.log(error)
+    }
+
+    console.log(req.body)
+    try {
+      res
+        .status(200) //  OK
+        .json({ localID, personalID, x, y, textValue, fuenteDelTexto, textoAlineado, widthState, heightState, backgroundDiv });
+
+    } catch (error) {
+      next(error);
+
+    }
+  })
 
 
 
